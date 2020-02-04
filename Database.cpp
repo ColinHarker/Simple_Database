@@ -122,10 +122,26 @@ void Database::readFromFile(void) {
 		cerr << "Error locating file";
 	}
 	while (file){
-	
+		 
+		getline(file, test);
 
-		string name = name_1.append(" " + name_2);
-		cout << name << email << phone << endl;
+		cout << test;
+
+
+		char str[] = stringToChar(test);
+
+		// Returns first token  
+		char* token = strtok(str, " ");
+
+		// Keep printing tokens while one of the 
+		// delimiters present in str[]. 
+		while (token != NULL)
+		{
+			printf("%s\n", token);
+			token = strtok(NULL, " ");
+		}
+
+		//string name = name_1.append(" " + name_2);
 		
 	}
 
@@ -133,10 +149,19 @@ void Database::readFromFile(void) {
 	file.close();
 	
 
+}
 
-	/*
-	if (head == NULL) {
-		db.create();
-	}
-	*/
+char[] stringToChar(string input) {
+	string s = input;
+
+	int n = s.length();
+
+	// declaring character array 
+	char char_array[20];
+
+	// copying the contents of the 
+	// string to char array 
+	strcpy(char_array, s.c_str());
+
+	return char_array;
 }

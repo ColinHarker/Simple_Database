@@ -33,4 +33,5 @@ public:
 	void print(void);
 	void saveToFile(void);
 	void readFromFile(void);
+	char* stringToChar(string input);
 };
