@@ -9,3 +9,4 @@ string phoneRefactor(string);
 void login(void);
 int next(void);
 void list(void);
+int checkInsertType(int, string);

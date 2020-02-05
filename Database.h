@@ -32,6 +32,7 @@ public:
 	int insertElement(int i, string n, string e, string p);
 	void print(void);
 	void saveToFile(void);
-	void readFromFile(void);
-	char* stringToChar(string input);
+	void readFromFile(int);
+	void createFromFile(void);
+	int check(void);
 };

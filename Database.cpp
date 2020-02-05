@@ -102,8 +102,8 @@ void Database::saveToFile(void){
 	node* elements = head;
 
 	while (elements != NULL) {
-		file << elements->info.name  << "\t"
-		     << elements->info.email << "\t"
+		file << elements->info.name  << ","
+		     << elements->info.email << ","
 		     << elements->info.phone << endl;
 		elements = elements->next;
 	}
@@ -111,7 +111,7 @@ void Database::saveToFile(void){
 	file.close();
 
 }
-void Database::readFromFile(void) {
+void Database::readFromFile(int insertType) {
 
 	ifstream file;
 	string name_1, name_2, email, phone, test;
@@ -122,46 +122,51 @@ void Database::readFromFile(void) {
 		cerr << "Error locating file";
 	}
 	while (file){
-		 
+		int iteration = 1;
+		string name, email, phone;
 		getline(file, test);
+		istringstream ss(test);
+		while (!ss.eof()) {
+			string x;
+			getline(ss, x, ',');
 
-		cout << test;
-
-
-		char str[] = stringToChar(test);
-
-		// Returns first token  
-		char* token = strtok(str, " ");
-
-		// Keep printing tokens while one of the 
-		// delimiters present in str[]. 
-		while (token != NULL)
-		{
-			printf("%s\n", token);
-			token = strtok(NULL, " ");
+			switch (iteration) {
+			case 1:
+				name = x;
+				break;
+			case 2:
+				email = x;
+				break;
+			case 3:
+				phone = x;
+				break;
+			}
+			iteration++;
 		}
-
-		//string name = name_1.append(" " + name_2);
-		
+		if (insertType == 0) {
+			create(name, email, phone);
+			insertType = 2;
+		}
+		else {
+			insertElement(insertType, name, email, phone);
+		}
 	}
 
-
 	file.close();
-	
-
 }
+void Database::createFromFile(void) {
+	system("cls");
+	cout << "Database Created" << endl;
+	readFromFile(0);
+}
+int Database::check(void) {
+	int retval;
+	if (head == NULL) {
+		retval = 0;
 
-char[] stringToChar(string input) {
-	string s = input;
-
-	int n = s.length();
-
-	// declaring character array 
-	char char_array[20];
-
-	// copying the contents of the 
-	// string to char array 
-	strcpy(char_array, s.c_str());
-
-	return char_array;
+	}
+	else {
+		retval = 1;
+	}
+	return retval;
 }

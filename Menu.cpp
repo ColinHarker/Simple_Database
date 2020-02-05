@@ -71,7 +71,7 @@ void list(void) {
 		<< "\t-           My Database            -\n"
 		<< "\t------------------------------------\n\n";
 
-	cout << "\t1. Create Database\n"
+	cout << "\t1. Create Database and insert element\n"
 		<< "\t2. Insert Element\n"
 		<< "\t3. Print Elements\n"
 		<< "\t4. Save to file\n"
@@ -84,6 +84,7 @@ int next() {
 	cout << "\nGo back to menu?" << endl;
 	cout << "1. Yes\t2. No" << endl;
 	cin >> choice;
+	system("cls");
 
 	if (choice == 1) {
 		list();
@@ -94,4 +95,22 @@ int next() {
 		return 4;
 	}
 	return cho_ice;
+}
+int checkInsertType(int i, string s) {
+	int insertType;
+	switch (i) {
+
+	case 1:
+		do {
+			cout << s;
+			if (!(cin >> insertType)) {
+				cout << "Please enter numbers only." << endl;
+				cin.clear();
+				cin.ignore(10000, '\n');
+			}
+		} while (insertType != 1 && insertType != 2);
+		break;
+
+	}
+	return insertType;
 }
