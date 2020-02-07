@@ -6,13 +6,14 @@
 
 using namespace std;
 
-struct people {
-	
+struct people
+{
+
 	string name;
 	string email;
 	string phone;
 
-	people() {};
+	people(){};
 	people(string n, string e, string p)
 	{
 		name = n;
@@ -21,18 +22,20 @@ struct people {
 	}
 };
 
-struct node {
+struct node
+{
 	people info;
-	node* next = nullptr;
-	node* previous = nullptr;
+	node *next = nullptr;
+	node *previous = nullptr;
 };
 
-class Database {
+class Database
+{
 
 private:
-	node* head = nullptr;
-	node* tail = nullptr;
-	node* newNode = nullptr;
+	node *head = nullptr;
+	node *tail = nullptr;
+	node *newNode = nullptr;
 
 public:
 	Database(){};
@@ -45,17 +48,17 @@ public:
 	int check(void);
 };
 
-class PrintHeader 
+class PrintHeader
 {
 	string name, email, phone;
+
 public:
-	PrintHeader() : name("----"), email("----"), phone("------------\n") {};
+	PrintHeader() : name("----"), email("----"), phone("------------\n"){};
 	PrintHeader(string n, string e, string p)
 	{
-		name = n; 
+		name = n;
 		email = e;
 		phone = p;
 	}
-	friend ostream& operator<< (ostream& os, const PrintHeader& ph);
+	friend ostream &operator<<(ostream &os, const PrintHeader &ph);
 };
-
