@@ -11,7 +11,8 @@ int main(){
 	int choice;
 	int insertType;
 	Database DB;
-	string name, email, phone;
+	people p;
+	bool running = true;
 	
 	system("My Database");
 	system("cls");
@@ -30,58 +31,55 @@ int main(){
 		}
 	} while (choice != 1 && choice != 2 && choice != 3 && choice != 4 && choice != 5 && choice != 6);
 
-	while (1) {
+	while (running) {
 		switch (choice) {
 		case 1:
 			system("cls");
-			cout << "Database created.\n";
-			cin.ignore();
-			cout << "Name (First & Last):";
-			getline(cin, name);
-			cout << "\nEmail:";
-			getline(cin, email);
-			cout << "\nPhone Number:";
-			getline(cin, phone);
-
-			phone = phoneRefactor(phone);
-			while (phone.compare("null") == 0) {
-				cout << "Please enter a full 10 digit phone number:" << endl;
-				getline(cin, phone);
-				phone = phoneRefactor(phone);
+			if (DB.check() == 1) {
+				cout << "Database has already been created" << endl;
 			}
+			else {
 
-			DB.create(name, email, phone);
+				cout << "Database created.\n\n";
+
+				cin.ignore();
+			
+				p = getData(p);
+
+				p.phone = phoneRefactor(p.phone);
+				while (p.phone.compare("null") == 0) {
+					cout << "Please enter a full 10 digit phone number:" << endl;
+					getline(cin, p.phone);
+					p.phone = phoneRefactor(p.phone);
+				}
+
+				DB.create(p.name, p.email, p.phone);
+			}
 			choice = next();
 			break;
 
 		case 2:
 			system("cls");
-			
-			do {
-				cout << "Where in the list do you want data inserted?\n 1.Front\n 2.Back\n";
-				if (!(cin >> insertType)) {
-					cout << "Please enter numbers only." << endl;
-					cin.clear();
-					cin.ignore(10000, '\n');
-				}
-			} while (insertType != 1 && insertType != 2);
-			
-			cin.ignore();
-			cout << "Name (First & Last):";
-			getline(cin, name);
-			cout << "\nEmail:";
-			getline(cin, email);
-			cout << "\nPhone Number:";
-			getline(cin, phone);
-			
-			phone = phoneRefactor(phone);
-			while (phone.compare("null") == 0) {
-				cout << "Please enter a full 10 digit phone number:" << endl;
-				getline(cin, phone);
-				phone = phoneRefactor(phone);
+			if (DB.check() == 0) {
+				cout << "You must create database first." << endl;
 			}
+			else {
+				
+				insertType = checkInsertType(1, "Where in the list do you want data inserted?\n 1.Front\n 2.Back\n");
 
-			DB.insertElement(insertType, name, email, phone);
+				cin.ignore();
+				
+				p = getData(p);
+
+				p.phone = phoneRefactor(p.phone);
+				while (p.phone.compare("null") == 0) {
+					cout << "Please enter a full 10 digit phone number:" << endl;
+					getline(cin, p.phone);
+					p.phone = phoneRefactor(p.phone);
+				}
+
+				DB.insertElement(insertType, p.name, p.email, p.phone);
+			}
 			choice = next();
 			break;
 
@@ -99,12 +97,27 @@ int main(){
 
 		case 5:
 			system("cls");
-			DB.readFromFile();
+			if (!DB.check()) {
+				cout << "no database here" << endl;
+
+				insertType = checkInsertType(1, "Do you want to create a database to insert contents of file?\n 1.Yes\n 2.No\n");
+		
+				if (insertType == 1) {
+					DB.createFromFile();
+				}
+				choice = next();
+				break;
+			}
+
+			insertType = checkInsertType(1, "Where in the list do you want data inserted?\n 1.Front\n 2.Back\n");
+
+			DB.readFromFile(insertType);
 			choice = next();
 			break;
+
 		case 6:
 			system("cls");
-			exit(EXIT_SUCCESS);
+			running = false;
 			break;
 
 		default:

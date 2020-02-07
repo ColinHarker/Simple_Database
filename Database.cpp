@@ -10,17 +10,17 @@ using namespace std;
 
 int Database::create(string n, string e, string p) {
 
-	if (head == NULL) {//if there is nothing yet in the list, create node and add it to list
+	if (head == nullptr) {//if there is nothing yet in the list, create node and add it to list
 		newNode = new node;
 		newNode->info.email = e;
 		newNode->info.name = n;
 		newNode->info.phone = p;
-		newNode->next = NULL;
-		newNode->previous = NULL;
+		newNode->next = nullptr;
+		newNode->previous = nullptr;
 		head = newNode;
 		return 1;
 	}
-	else if (head != NULL) {//if there is already and element in the list
+	else if (head != nullptr) {//if there is already and element in the list
 		cout << "Database has already been created";
 		return 0;
 	}
@@ -34,30 +34,30 @@ int Database::insertElement(int i, string n, string e, string p) {
 	newNode->info.name = n;
 	newNode->info.phone = p;
 
-	if (head != NULL) { //check to see if the database has been initialized
+	if (head != nullptr) { //check to see if the database has been initialized
 
 		switch (insertType) {
 
 		case 1: //insert element at front of list
 			head->previous = newNode;
 			newNode->next = head;
-			newNode->previous = NULL;
+			newNode->previous = nullptr;
 			head = newNode;
 			return 1;
 			break;
 
 		case 2: //insert element at back of list if there is only one element of the list
-			if (tail == NULL) {
+			if (tail == nullptr) {
 				tail = newNode;
 				tail->previous = head;
-				tail->next = NULL;
+				tail->next = nullptr;
 				head->next = tail;
 				return 1;
 				break;
 			}
 			else { //insert element at back if there is more than one element
 				tail->next = newNode;
-				newNode->next = NULL;
+				newNode->next = nullptr;
 				newNode->previous = tail;
 				tail = newNode;
 				return 1;
@@ -74,20 +74,23 @@ int Database::insertElement(int i, string n, string e, string p) {
 	}
 }
 void Database::print(void) {
-	//cout << "Name\tEmail\t\t\tPhone Number" << endl;
-	cout << left << setw(15) << "Name" << left << setw(25) << "Email" << left << setw(10) << "Phone Number" << endl;
-	cout << left << setw(15) << "----" << left << setw(25) << "-----" << left << setw(10) << "------------\n" << endl;
+
+	PrintHeader ph("Name", "Email", "Phone Number");
+	PrintHeader dh;
+
+	cout << ph;
+	cout << dh;
+
 	node* elements = head;
-	while (elements != NULL) {
-		cout << left << setw(15) << elements->info.name  
-			 << left << setw(25) << elements->info.email  
-			 << left << setw(10) << elements->info.phone << endl;
+	while (elements != nullptr) {
+		PrintHeader element(elements->info.name, elements->info.email, elements->info.phone);
+		cout << element;
 		elements = elements->next;
 	}
 }
 void Database::saveToFile(void){
 	
-	const char *path = "Desktop/";
+	const char *path = "Desktop";
 
 	ofstream file(path);
 	file.open("save.txt", ios::app); //appends data to the end of file);
@@ -101,9 +104,9 @@ void Database::saveToFile(void){
 
 	node* elements = head;
 
-	while (elements != NULL) {
-		file << elements->info.name  << "\t"
-		     << elements->info.email << "\t"
+	while (elements != nullptr) {
+		file << elements->info.name  << ","
+		     << elements->info.email << ","
 		     << elements->info.phone << endl;
 		elements = elements->next;
 	}
@@ -111,7 +114,7 @@ void Database::saveToFile(void){
 	file.close();
 
 }
-void Database::readFromFile(void) {
+void Database::readFromFile(int insertType) {
 
 	ifstream file;
 	string name_1, name_2, email, phone, test;
@@ -122,46 +125,49 @@ void Database::readFromFile(void) {
 		cerr << "Error locating file";
 	}
 	while (file){
-		 
+		int iteration = 1;
+		string name, email, phone;
 		getline(file, test);
+		istringstream ss(test);
+		while (!ss.eof()) {
+			string x;
+			getline(ss, x, ',');
 
-		cout << test;
-
-
-		char str[] = stringToChar(test);
-
-		// Returns first token  
-		char* token = strtok(str, " ");
-
-		// Keep printing tokens while one of the 
-		// delimiters present in str[]. 
-		while (token != NULL)
-		{
-			printf("%s\n", token);
-			token = strtok(NULL, " ");
+			switch (iteration) {
+			case 1:
+				name = x;
+				break;
+			case 2:
+				email = x;
+				break;
+			case 3:
+				phone = x;
+				break;
+			}
+			iteration++;
 		}
-
-		//string name = name_1.append(" " + name_2);
-		
+		if (insertType == 0) {
+			create(name, email, phone);
+			insertType = 2;
+		}
+		else {
+			insertElement(insertType, name, email, phone);
+		}
 	}
 
-
 	file.close();
-	
-
+}
+void Database::createFromFile(void) {
+	system("cls");
+	cout << "Database Created" << endl;
+	readFromFile(0);
+}
+int Database::check(void) {
+	return int(head != nullptr);
 }
 
-char[] stringToChar(string input) {
-	string s = input;
-
-	int n = s.length();
-
-	// declaring character array 
-	char char_array[20];
-
-	// copying the contents of the 
-	// string to char array 
-	strcpy(char_array, s.c_str());
-
-	return char_array;
-}
+ostream& operator<< (ostream& os, const PrintHeader& ph)
+{
+	os << left << setw(15) << ph.name << left << setw(25) << ph.email << left << setw(10) << ph.phone << endl;
+	return os;
+};
