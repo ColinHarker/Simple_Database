@@ -184,21 +184,9 @@ int Database::check(void)
 {
 	return int(head != nullptr);
 }
-void Database::createFromFile(void)
-{
-	system("cls");
-	cout << "Database Created" << endl;
-	readFromFile(0);
-}
-int Database::check(void)
-{
-	int retval;
-	if (head == NULL)
-	{
-		retval = 0;
 
-		ostream &operator<<(ostream &os, const PrintHeader &ph)
-		{
-			os << left << setw(15) << ph.name << left << setw(25) << ph.email << left << setw(10) << ph.phone << endl;
-			return os;
-		};
+ostream &operator<<(ostream &os, const PrintHeader &ph)
+{
+	os << left << setw(15) << ph.name << left << setw(25) << ph.email << left << setw(10) << ph.phone << endl;
+	return os;
+};
